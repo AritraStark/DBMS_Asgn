@@ -224,9 +224,9 @@ function App() {
             <TextField
               
               margin="dense"
-              id="address"
-              label="Address"
-              type="name"
+              id="phone"
+              label="Phone"
+              type="digits"
               fullWidth
               variant="standard"
               value={phone}
@@ -295,9 +295,9 @@ function App() {
             <TextField
               
               margin="dense"
-              id="address"
-              label="Address"
-              type="name"
+              id="phone"
+              label="Phone"
+              type="digits"
               fullWidth
               variant="standard"
               value={phone}
