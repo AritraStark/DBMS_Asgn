@@ -221,6 +221,17 @@ function App() {
               value={address}
               onChange={(e)=>{setAddress(e.target.value)}}
             />
+            <TextField
+              
+              margin="dense"
+              id="address"
+              label="Address"
+              type="name"
+              fullWidth
+              variant="standard"
+              value={phone}
+              onChange={(e)=>{setPhone(e.target.value)}}
+            />
             
           </DialogContent>
           <DialogActions>
@@ -280,6 +291,17 @@ function App() {
               variant="standard"
               value={address}
               onChange={(e)=>{setAddress(e.target.value)}}
+            />
+            <TextField
+              
+              margin="dense"
+              id="address"
+              label="Address"
+              type="name"
+              fullWidth
+              variant="standard"
+              value={phone}
+              onChange={(e)=>{setPhone(e.target.value)}}
             />
             
           </DialogContent>
