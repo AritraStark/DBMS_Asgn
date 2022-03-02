@@ -1,2 +1,2 @@
 # SEM 6 Assignments
-Different assignments in different branches
+Compiler Design Assignment 1
