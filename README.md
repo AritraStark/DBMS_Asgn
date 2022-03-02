@@ -1,2 +1,2 @@
-# DBMS_Asgn
-DBMS assignments in different branches
+# SEM 6 Assignments
+Different assignments in different branches
