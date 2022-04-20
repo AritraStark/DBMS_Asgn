@@ -1,83 +1,83 @@
 ---1
 
-create table dept3_aritra
+create table emp_temp_aritra
 (
-dcode varchar(10) primary key,
-dname varchar(30)
-);
-
-create table emp3_aritra
-(
-ecode varchar(10) primary key,
-dcode varchar(10),
-name varchar(30),
-grade varchar(1),
+ecode number(3,0) primary key,
+enamae varchar(30),
+dcode number(3,0),
 basic number(8,2),
-jn_dt date default sysdate,
-address varchar(50),
-city varchar(20),
-foreign key (dcode) references dept3_aritra(dcode) ,
-constraint c1 check (basic>=5000 and basic<=9000),
-constraint c2 check(grade in ('A','B','C')),
-constraint c3 check (name=upper(name))
+foreign key (dcode) references dept_temp_aritra(dcode)
 );
 
-create table leave3_aritra
-(
-ecode varchar(10),
-leave varchar(2),
-from_dt date,
-to_dt date,
-foreign key (ecode) references emp3_aritra(ecode) on delete cascade,
-constraint c4 check(leave in ('CL', 'EL', 'ML'))
-);
+insert into emp_temp_aritra values(1, 'A', 1, 20000);
+insert into emp_temp_aritra values(2, 'B', 2, 30000);
+insert into emp_temp_aritra values(3, 'C', 1, 40000);
+insert into emp_temp_aritra values(5, 'D' ,3 ,25000);
+
+DECLARE
+r emp_temp_aritra%rowtype;
+BEGIN
+select * into r from emp_temp_aritra where ecode = &ecode;
+dbms_output.put_line(r.enamae);
+EXCEPTION
+WHEN no_data_found THEN
+dbms_output.put_line('No such employee found.');
+END;
+/
 
 ---2
 
-insert into dept3_aritra values('D1', 'Colonel');
-insert into emp3_aritra values('E1', 'D1', 'Adam', 'A', '2000', '2-JAN-2020', '5 Downing Street', 'Delhi');
-insert into emp3_aritra values('E1', 'D2', 'ADAM', 'A', '5000', '2-JAN-2020', '5 Downing Street', 'Delhi');
-insert into emp3_aritra values('E1', 'D1', 'ADAM', 'A', '5000', '2-JAN-2020', '5 Downing Street', 'Delhi');
-delete from dept3_aritra where dcode='D1';
-insert into leave3_aritra values('E1', 'CL', '20-JAN-2021', '22-JAN-2021');
-insert into leave3_aritra values ('E2' , 'EL', '20-FEB-2021', '22-FEB-2021');
-insert into leave3_aritra values ('E3' , 'CL', '20-JUN-2021', '22-JUN-2021');
-insert into leave3_aritra values ('E4' , 'EL', '20-AUG-2021', '22-AUG-2021');
-delete from emp3_aritra where ecode='E2';
----3
-
-insert into emp3_aritra values('E1', 'D1', 'ADAM', 'A', '5000', '2-JAN-2020', '5 Downing Street', 'Delhi');
-insert into emp3_aritra values('E2', 'D1', 'MARK', 'A', '7000', '3-JAN-2020', '5 Downing Street', 'Delhi');
-insert into emp3_aritra values('E3', 'D1', 'SUNIL', 'A', '7000', '4-JAN-2020', '5 Downing Street', 'Delhi');
-insert into emp3_aritra values('E4', 'D1', 'JOHN', 'A', '9000', '6-JAN-2020', '5 Downing Street', 'Delhi');
-
----a
-
-create table temp3_aritra as
+create table dept_temp_aritra
 (
-select ecode, name, dname, basic from emp3_aritra join dept3_aritra on emp3_aritra.dcode=dept3_aritra.dcode where basic=7000 and emp3_aritra.dcode='D1'
+dcode number(3,0) primary key,
+dname varchar(30)
 );
 
----b
+insert into dept_temp_aritra values (1, 'Finance');
+insert into dept_temp_aritra values (2, 'Technology');
+insert into dept_temp_aritra values (3, 'Management');
 
-insert into temp3_aritra 
-select ecode, name, dname, basic from emp3_aritra join dept3_aritra on emp3_aritra.dcode=dept3_aritra.dcode where basic>7000;
+DECLARE
+ecodei emp_temp_aritra.ecode%type;
+enamei emp_temp_aritra.enamae%type;
+dcodei emp_temp_aritra.dcode%type;
+basici emp_temp_aritra.basic%type;
+cnte number(3,0);
+cntd number(3,0);
+BEGIN
+ecodei := &ecodei;
+enamei := '&enamei';
+dcodei := &dcodei;
+basici := &basici;
+select count(*) into cnte from emp_temp_aritra where ecode = ecodei;
+select count(*) into cntd from dept_temp_aritra where dcode = dcodei;
+IF cnte = 0 and cntd = 1 THEN
+	insert into emp_temp_aritra values(ecodei, enamei, dcodei, basici);
+ELSE
+	dbms_output.put_line('Invalid Data.');
+END IF;
+END;
+/
 
----c
+---3
 
-alter table temp3_aritra add net_pay number(8,2);
-
----d
-
-update temp3_aritra set net_pay = 1.5*basic;
-
----e
-
-alter table temp3_aritra drop column net_pay;
+select * from 
+(
+select * from emp_temp_aritra order by basic desc
+)
+where rownum <= 5;
 
 ---4
 
-drop table leave3_aritra;
-drop table emp3_aritra;
-drop table dept3_aritra;
+DECLARE
+cnt number(3,0);
+dcodei emp_temp_aritra.dcode%type;
+BEGIN
+dcodei:=&dcodei;
+select count(*) into cnt from emp_temp_aritra where dcode=dcodei;
+delete from emp_temp_aritra where dcode = dcodei;
+dbms_output.put_line('Deleted number of users is ');
+dbms_output.put_line(TO_CHAR(cnt));
+END;
+/
 
